@@ -51,6 +51,8 @@ def PLA(training_set, weights, threshold, num_iterations):
             if (is_misclassified(training_set[i], classification)):
                 misclassification_flag = 1
                 weights, threshold = PLA_correction(training_set[i], weights, threshold, correct_classification(training_set[i]))
+                print(threshold)
+                print(weights)
         iteration += 1
     return weights, threshold
 
@@ -76,12 +78,13 @@ def classify(data_set, weights, threshold):
     return labels
 
 def main():
-    plot_min = 1
-    plot_max = 1000
-    training_set = random_training_set_generator(50, plot_min, plot_max, linear_function)
+    plot_min = 0
+    plot_max = 1
+    #training_set = random_training_set_generator(50, plot_min, plot_max, linear_function)
+    training_set = [[0, 0, -1], [0, 1, 1], [1, 0, 1], [1, 1, 1]]
     reference = [[plot_min, linear_function(plot_min)], [plot_max, linear_function(plot_max)]]
     my_plot(training_set, reference)
-    weights, threshold = PLA(training_set, [0,0], 0, 5)
+    weights, threshold = PLA(training_set, [0,0], 0, 100000)
     labels = classify(training_set, weights, threshold)
     my_plot_classification(training_set, labels, reference)
 
