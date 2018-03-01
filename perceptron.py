@@ -24,7 +24,7 @@ def PLA_dot_product(data, weights, threshold):
     return -1
 
 def PLA_correction(data, weights, threshold, correct_label):
-    return sum_vectors(weights, scalar_times_vector(correct_label, data)), (threshold + correct_label)
+    return sum_vectors(weights, scalar_times_vector(correct_label, data)), (threshold - correct_label)
 
 def sum_vectors(v1, v2):
     v3 = []
@@ -48,11 +48,11 @@ def PLA(training_set, weights, threshold, num_iterations):
         misclassification_flag = 0
         for i in range(0, len(training_set)):
             classification = PLA_dot_product(training_set[i], weights, threshold)
+            print("dot " + str(training_set[i]) + " threshold: " + str(threshold) + " " + "weights: " + str(weights) + "class: " + str(classification))
             if (is_misclassified(training_set[i], classification)):
                 misclassification_flag = 1
                 weights, threshold = PLA_correction(training_set[i], weights, threshold, correct_classification(training_set[i]))
-                print(threshold)
-                print(weights)
+                print("miss: " + str(training_set[i]) + " threshold: " + str(threshold) + " " + "weights: " + str(weights))
         iteration += 1
     return weights, threshold
 
@@ -84,7 +84,7 @@ def main():
     training_set = [[0, 0, -1], [0, 1, 1], [1, 0, 1], [1, 1, 1]]
     reference = [[plot_min, linear_function(plot_min)], [plot_max, linear_function(plot_max)]]
     my_plot(training_set, reference)
-    weights, threshold = PLA(training_set, [0,0], 0, 100000)
+    weights, threshold = PLA(training_set, [-1,1], 1/2, 10  )
     labels = classify(training_set, weights, threshold)
     my_plot_classification(training_set, labels, reference)
 
