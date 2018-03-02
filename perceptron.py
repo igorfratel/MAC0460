@@ -14,9 +14,6 @@ def random_training_set_generator(size, min, max, target_function):
             training_set.append([x, y, -1])
     return training_set
 
-def linear_function(x):
-    return x
-
 def PLA_dot_product(data, weights, threshold):
     result = data[0]*weights[0] + data[1]*weights[1]
     if(result > threshold):
@@ -78,13 +75,21 @@ def classify(data_set, weights, threshold):
     return labels
 
 def main():
+
+    #You can alter these variables
     plot_min = 0
-    plot_max = 1
-    #training_set = random_training_set_generator(50, plot_min, plot_max, linear_function)
-    training_set = [[0, 0, -1], [0, 1, 1], [1, 0, 1], [1, 1, 1]]
-    reference = [[plot_min, linear_function(plot_min)], [plot_max, linear_function(plot_max)]]
+    plot_max = 500
+    data_set_size = 10
+    target_function = lambda x: 250
+    weights = [0, 0]
+    threshold = 0
+    iterations = 100
+
+
+    training_set = random_training_set_generator(data_set_size, plot_min, plot_max, target_function)
+    reference = [[plot_min, target_function(plot_min)], [plot_max, target_function(plot_max)]]
     my_plot(training_set, reference)
-    weights, threshold = PLA(training_set, [-1,1], 1/2, 10  )
+    weights, threshold = PLA(training_set, weights, threshold, iterations)
     labels = classify(training_set, weights, threshold)
     my_plot_classification(training_set, labels, reference)
 
