@@ -45,11 +45,11 @@ def PLA(training_set, weights, threshold, num_iterations):
         misclassification_flag = 0
         for i in range(0, len(training_set)):
             classification = PLA_dot_product(training_set[i], weights, threshold)
-            print("dot " + str(training_set[i]) + " threshold: " + str(threshold) + " " + "weights: " + str(weights) + "class: " + str(classification))
+            #print("dot " + str(training_set[i]) + " threshold: " + str(threshold) + " " + "weights: " + str(weights) + "class: " + str(classification))
             if (is_misclassified(training_set[i], classification)):
                 misclassification_flag = 1
                 weights, threshold = PLA_correction(training_set[i], weights, threshold, correct_classification(training_set[i]))
-                print("miss: " + str(training_set[i]) + " threshold: " + str(threshold) + " " + "weights: " + str(weights))
+                #print("miss: " + str(training_set[i]) + " threshold: " + str(threshold) + " " + "weights: " + str(weights))
         iteration += 1
     return weights, threshold
 
@@ -75,22 +75,37 @@ def classify(data_set, weights, threshold):
     return labels
 
 def main():
-
+    #training
     #You can alter these variables
     plot_min = 0
     plot_max = 500
-    data_set_size = 10
+    data_set_size = 100
     target_function = lambda x: 250
     weights = [0, 0]
     threshold = 0
-    iterations = 100
+    iterations = 10000
 
-
+    print("Training...")
     training_set = random_training_set_generator(data_set_size, plot_min, plot_max, target_function)
     reference = [[plot_min, target_function(plot_min)], [plot_max, target_function(plot_max)]]
     my_plot(training_set, reference)
     weights, threshold = PLA(training_set, weights, threshold, iterations)
     labels = classify(training_set, weights, threshold)
     my_plot_classification(training_set, labels, reference)
+
+    #testing
+    #You can alter this variable
+    test_set_size = 10
+
+    print("Testing...")
+    test_set = random_training_set_generator(test_set_size, plot_min, plot_max, target_function)
+    reference = [[plot_min, target_function(plot_min)], [plot_max, target_function(plot_max)]]
+    my_plot(test_set, reference)
+    labels = classify(test_set, weights, threshold)
+    my_plot_classification(test_set, labels, reference)
+
+
+
+
 
 main()
