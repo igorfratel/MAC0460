@@ -1,0 +1,1 @@
+perceptron implementation. Parameters and target function are defined on the source code
