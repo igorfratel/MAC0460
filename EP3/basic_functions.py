@@ -75,7 +75,29 @@ def graph2(W_np, x_np, b_np):
             np.ndarray(shape=(d,d), dtype=float64)
     """
     # YOUR CODE HERE:
-    raise NotImplementedError("falta completar a função graph2")
+    def sigmoid(x):
+        return 1/(1 + np.exp(-x))
+
+    W = torch.from_numpy(W_np)
+    W.requires_grad = True
+    X = torch.from_numpy(x_np)
+    B = torch.from_numpy(b_np)
+    u = torch.matmul(W,X)+B
+    g = F.sigmoid(u)
+    f = torch.sum(g)
+    f.backward()
+    auto_grad = W.grad
+
+    u_np = np.matmul(W_np, x_np) + b_np
+    g_np = sigmoid(u_np)
+    sigmoid_np = sigmoid(u_np)*(np.ones(W_np.shape[0])-sigmoid(u_np))
+
+    i = [np.eye(W_np.shape[0])*k for k in x_np]
+    dudW = np.stack(i)
+    dgdW = np.diag(sigmoid_np)*dudW
+
+    tmp_list = [np.diag(x) for x in dgdW]
+    user_grad = np.transpose(np.array(tmp_list))
     # END YOUR CODE
     return f, auto_grad, user_grad
 
